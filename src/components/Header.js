@@ -64,13 +64,13 @@ const Header = () => {
                 </a>
               ))}
               <a
-                href="/portfolio/#films-section"
+                href="/#films-section"
                 onClick={handleClick("films")}
               >
                 My Film Photography
               </a>
               <a
-                href="/portfolio/#contactme-section"
+                href="=/#contactme-section"
                 onClick={handleClick("contactme")}
               >
                 Contact Me
