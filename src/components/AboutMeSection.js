@@ -63,7 +63,7 @@ const AboutMeSection = () => {
     <br></br>
     <br></br>
       <Heading size="lg" color="white">
-        Nice to meet you, I am a Y5 NUS Business Analytics student with a passion for software/web development
+        I am a Y5 NUS Business Analytics student with a passion for software/web development
       </Heading>
       <Heading size="lg" color="white">
        You deserve options...click to choose my tech stack ! 
@@ -95,7 +95,7 @@ const AboutMeSection = () => {
           width:"300px",
           alignItems:"center",
           textAlign:"center",
-          width:"500px"
+          width:"300px"
           
         }}>
         <Heading size="lg" color="white">
