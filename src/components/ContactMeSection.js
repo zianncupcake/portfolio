@@ -1,5 +1,4 @@
-import React from "react";
-import { useFormik } from "formik";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -16,53 +15,54 @@ import * as Yup from 'yup';
 import FullScreenSection from "./FullScreenSection";
 import useSubmit from "../hooks/useSubmit";
 import { useAlertContext } from "../context/alertContext";
+import { useForm, ValidationError } from '@formspree/react';
+import { Form } from "react-router-dom";
+
 
 const ContactMeSection = () => {
   const { isLoading, submit } = useSubmit();
   const alertContext = useAlertContext();
-
-  const formik = useFormik({
-    initialValues: {
-      firstName: "",
-      email: "",
-      type: "",
-      comment: "",
-    },
-    onSubmit: async (values) => {
-      try {
-        const response = await submit(values);
-        if (response.type === "success") {
-          alertContext.onOpen({
-            status: "success",
-            title: "Form submitted successfully!",
-            description: `Thank you, ${values.firstName}! We'll get back to you soon.`,
-          });
-          formik.resetForm();
-        } else {
-          alertContext.onOpen({
-            status: "error",
-            title: "Form submission failed",
-            description: "An error occurred while submitting the form. Please try again later.",
-          });
-        }
-      } catch (error) {
-        console.error(error);
-        alertContext.onOpen({
-          status: "error",
-          title: "Form submission failed",
-          description: "An error occurred while submitting the form. Please try again later.",
-        });
-      }
-    },
-    validationSchema: Yup.object({
-      firstName: Yup.string().required("First name is required"),
-      email: Yup.string()
-        .email("Invalid email address")
-        .required("Email address is required"),
-      type: Yup.string().required("Please select a type of enquiry"),
-      comment: Yup.string().required("Please enter your message"),
-    }),
+  const [state, handleSubmit] = useForm("xbjverab");
+  const [formValues, setFormValues] = useState({
+    firstName: "",
+    email: "",
+    type: "Job Opportunity",
+    comment: "",
   });
+
+  const isFormValid = () => {
+    return Object.values(formValues).every(value => value.trim() !== "");
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
+    if (state.succeeded) {
+      return (
+        <FullScreenSection
+      isDarkBackground
+      backgroundColor="#c7c7bb"
+      py={16}
+      spacing={8}
+      alignItems="center"
+    >
+      <VStack w="1024px" p={32} alignItems="center" id="contactme-section" >
+        <Heading as="h1" id="contactme-section">
+          Thank you {formValues.firstName}
+        </Heading>
+        <Heading as="h1" id="contactme-section">
+          Brb...replying to {formValues.email}
+        </Heading>
+      </VStack>
+    </FullScreenSection>
+      )
+  }
+
 
   return (
     <FullScreenSection
@@ -71,41 +71,44 @@ const ContactMeSection = () => {
       py={16}
       spacing={8}
     >
-      <VStack w="1024px" p={32} alignItems="flex-start" id="contactme-section" >
+      <VStack w="1024px" p={32} alignItems="center" id="contactme-section" >
         <Heading as="h1" id="contactme-section">
-          Contact me
+          Drop me a text, I'm lonely
         </Heading>
         <Box p={6} rounded="md" w="100%" >
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <VStack spacing={4}>
-              <FormControl
-                isInvalid={formik.touched.firstName && formik.errors.firstName}
-              >
-                <FormLabel htmlFor="firstName">Name</FormLabel>
+              <FormControl>
+                <FormLabel htmlFor="firstName" style = {{fontSize:"20px"}} >Name</FormLabel>
                 <Input
                   border="2px solid white"
                   id="firstName"
                   name="firstName"
-                  {...formik.getFieldProps("firstName")}
+                  value={formValues.firstName}
+                  onChange={handleInputChange}
+                  style = {{
+                  fill:"c7c7bb",
+                  color:"white"
+                  }}
                 />
-                <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
               </FormControl>
-              <FormControl
-                isInvalid={formik.touched.email && formik.errors.email}
-              >
-                <FormLabel htmlFor="email">Email Address</FormLabel>
+              <FormControl>
+                <FormLabel htmlFor="email" style = {{fontSize:"20px"}}>Email Address</FormLabel>
                 <Input
                   border="2px solid white"
                   id="email"
                   name="email"
                   type="email"
-                  {...formik.getFieldProps("email")}
+                  value={formValues.email}
+                  onChange={handleInputChange}
                 />
-                <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+                
               </FormControl>
-              <FormControl>
-                <FormLabel htmlFor="type">Type of enquiry</FormLabel>
-                <Select id="type" name="type" {...formik.getFieldProps("type")} border="2px solid white">
+
+              <FormControl> 
+                <FormLabel htmlFor="type" style = {{fontSize:"20px"}}>Type Of Enquiry</FormLabel>
+                <Select id="type" name="type" border="2px solid white"  value={formValues.type}
+                  onChange={handleInputChange}>
                   <option value="hireMe">Job Opportunity</option>
                   <option value="openSource">
                     Freelance Project Proposal
@@ -113,23 +116,22 @@ const ContactMeSection = () => {
                   <option value="other">Other</option>
                 </Select>
               </FormControl>
-              <FormControl
-                isInvalid={formik.touched.comment && formik.errors.comment}
-              >
-                <FormLabel htmlFor="comment">Your message</FormLabel>
+
+              <FormControl>
+                <FormLabel htmlFor="comment" style = {{fontSize:"20px"}}>Your Message</FormLabel>
                 <Textarea
                   border="2px solid white"
                   id="comment"
                   name="comment"
                   height={250}
-                  {...formik.getFieldProps("comment")}
+                  value={formValues.comment}
+                  onChange={handleInputChange}
                 />
-                <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
               </FormControl>
               {isLoading ? (
                 <Button isLoading>Loading...</Button>
               ) : (
-                <Button type="submit" color="#c7c7bb" width="full">
+                <Button type="submit" color="#c7c7bb" width="full" isDisabled={!isFormValid()} >
                   Submit
                 </Button>
               )}
@@ -138,6 +140,7 @@ const ContactMeSection = () => {
         </Box>
       </VStack>
     </FullScreenSection>
+    
   );
 };
 

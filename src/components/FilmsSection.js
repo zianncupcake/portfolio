@@ -194,7 +194,7 @@ const FilmsSection = () => {
       backgroundColor="#d4c8be"
       isDarkBackground
       p={8}
-      alignItems="flex-start"
+      alignItems="center"
       spacing={8}
       id="films-section"
     >
@@ -205,6 +205,13 @@ const FilmsSection = () => {
       <Heading as="h1">
       </Heading>
       <Heading as="h1">
+        Don't mind me, I always find an excuse to showcase my film photos...
+      </Heading>
+      <Heading as="h1">
+       Camera: Minolta SR-T 101 | Film Stock: Kodak Ultramax 400 
+      </Heading>
+      <br></br>
+      <Heading as="h1" textAlign="left">
         Japan horizontals
       </Heading>
       <Box

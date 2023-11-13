@@ -64,10 +64,22 @@ const Header = () => {
                 </a>
               ))}
               <a
+                href="/portfolio/#aboutme-section"
+                onClick={handleClick("aboutme")}
+              >
+                About Me
+              </a>
+              <a
+                href="/portfolio/#experience-section"
+                onClick={handleClick("experience")}
+              >
+                Experience
+              </a>
+              <a
                 href="/portfolio/#films-section"
                 onClick={handleClick("films")}
               >
-                My Film Photography
+                My Film Photos
               </a>
               <a
                 href="/portfolio/#contactme-section"
